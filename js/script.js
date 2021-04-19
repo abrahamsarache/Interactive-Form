@@ -34,7 +34,8 @@ activitiesFieldset.addEventListener('change', (e)=>{
             let convertedAC = parseInt(activityCost);
             totalCost.textContent = `Total: $${startTotal += convertedAC}`;
         }
-    }   
+    }  
+
 //If the checked box has the same "data and time" but different "name" than other options, other options will be unclickable.
     for(i=1; i<checkboxes.length; i++){
         const activityTime = checkboxes[i].getAttribute("data-day-and-time");
@@ -286,7 +287,7 @@ for(let i = 0; i<checkboxes.length; i++){
     })
 }
 
-//Form Listener
+//Form Listener - To check if the form is valid I use the helper validation functions
 
 form.addEventListener('submit', (e)=>{
 
@@ -314,6 +315,7 @@ form.addEventListener('submit', (e)=>{
     const label5 = userZipCode.parentNode;
     const label6 = cvv.parentNode;
 
+//Helper functions to add or remove valid state and display error messages
     function addError(element) {
             e.preventDefault();
             element.className = 'not-valid';
@@ -325,6 +327,7 @@ form.addEventListener('submit', (e)=>{
             element.lastElementChild.style.display = 'none';
     }
 
+//If the credit card is selected we check more fields
     if(defaultPayment[1].selected) {
         if(testName === false){
             addError(label1);
@@ -361,7 +364,7 @@ form.addEventListener('submit', (e)=>{
             removeError(label6);
         }
 
-
+//If credit card is not selected we don't validate credit card fields
     } else {
         if(testName === false){
             addError(label1);
