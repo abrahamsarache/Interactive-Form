@@ -14,7 +14,6 @@ const selectColorOption = document.querySelectorAll('#color option');
 
 const selectDesign = document.getElementById('design');
 
-
 //"Register for Activities" section
 const activitiesFieldset = document.getElementById('activities');
 const totalCost = document.getElementById('activities-cost');
@@ -61,7 +60,7 @@ activitiesFieldset.addEventListener('change', (e)=>{
 selectDesign.addEventListener('change', (e)=>{
     selectColorDiv.hidden = false;
 
-    for (let i=0; selectColor.length; i++){
+    for (let i=0; i<selectColor.length; i++){
         const dataTheme = selectColor[i].getAttribute('data-theme');
         const dropdownOption = e.target.value;
 
@@ -84,7 +83,6 @@ selectJob.addEventListener('change',(e)=>{
     }
 });
 
-
 //Payment Section
 const payment = document.getElementById('payment');
 const defaultPayment = document.getElementsByName('user-payment')[0];
@@ -98,7 +96,6 @@ paypal.hidden = true;
 
 const bitcoin = document.getElementById('bitcoin');
 bitcoin.hidden = true;
-
 
 //Payment Listener. Helps showing only one payment option at a time.
 payment.addEventListener('change', (e)=>{
@@ -148,7 +145,6 @@ userEmail.addEventListener('input', (e)=>{
     validEmail(inputText);
 });
 
-
 //Credit Card
     //Credit card number
     const creditCardNum = document.getElementById('cc-num');
@@ -187,18 +183,19 @@ function validUserName(username) {
     const spaces = /^\s*$/.test(username);
     
         if(input) {
-            userNameHint.style.display = 'none';
             nameHintNumber.style.display = 'none';
+            removeError(userName.parentNode);
             return true;
             
         } else if(spaces) {
-            userNameHint.style.display = 'inherit';
             nameHintNumber.style.display = 'none';
+            addError(userName.parentNode);
             return false;
 
         } else if(noLetters) {
             nameHintNumber.style.display = 'inherit';
             userNameHint.style.display = 'none';
+            userName.parentNode.classList.add('not-valid');
             return false;
         } 
 };
@@ -207,11 +204,11 @@ function validEmail(email) {
     const correctEmail =/^["']?\w*[-.+()]?\w*[."]?[@][.-]?\w+[.]\w*[a-z]$/gmi.test(email);
         
         if(correctEmail) {
-            emailHint.style.display = 'none';
+            removeError(userEmail.parentNode);
             return true;
 
         } else {
-            emailHint.style.display = 'inherit';
+            addError(userEmail.parentNode);
             return false;  
         }
 };
@@ -237,11 +234,11 @@ function validCCNum(number) {
     const correctCC = /^\d{13,16}$/g.test(number);
         
         if(correctCC) {
-            creditCardNumHint.style.display = 'none';
+            removeError(creditCardNum.parentNode);
             return true;
            
         } else {
-            creditCardNumHint.style.display = 'inherit';
+            addError(creditCardNum.parentNode);
             return false; 
         }
 };
@@ -250,11 +247,11 @@ function validZipCode(number) {
     const correctNumber = /^\d{5}$/.test(number);
         
         if(correctNumber) { 
-            zipCodeHint.style.display = 'none';
+            removeError(userZipCode.parentNode);
             return true;
 
         } else {   
-            zipCodeHint.style.display = 'inherit';
+            addError(userZipCode.parentNode);
             return false;  
         }
 };
@@ -263,11 +260,11 @@ function validCVV(number) {
     const correctNumber = /^\d{3}$/.test(number);
         
         if(correctNumber) {
-            cvvHint.style.display = 'none';
+            removeError(cvv.parentNode);
             return true;
 
         } else {
-            cvvHint.style.display = 'inherit';
+            addError(cvv.parentNode);
             return false;  
         }
 };
@@ -287,8 +284,19 @@ for(let i = 0; i<checkboxes.length; i++){
     })
 }
 
-//Form Listener - To check if the form is valid I use the helper validation functions
+//Helper functions to add or remove valid state and display error messages
+function addError(element) {
+    element.classList.add('not-valid');
+    element.lastElementChild.style.display = 'inherit';
+}
 
+function removeError(element){
+    element.classList.remove('not-valid');
+    element.classList.add('valid');
+    element.lastElementChild.style.display = 'none';
+}
+
+//Form Listener - To check if the form is valid I use the helper validation functions
 form.addEventListener('submit', (e)=>{
 
     const valName = userName.value;
@@ -315,50 +323,44 @@ form.addEventListener('submit', (e)=>{
     const label5 = userZipCode.parentNode;
     const label6 = cvv.parentNode;
 
-//Helper functions to add or remove valid state and display error messages
-    function addError(element) {
-            e.preventDefault();
-            element.className = 'not-valid';
-            element.lastElementChild.style.display = 'inherit';
-    }
-
-    function removeError(element){
-            element.className = 'valid';
-            element.lastElementChild.style.display = 'none';
-    }
-
 //If the credit card is selected we check more fields
     if(defaultPayment[1].selected) {
         if(testName === false){
+            e.preventDefault();
             addError(label1);
         } else {
             removeError(label1);
         }
         
         if(testEmail === false) {
+            e.preventDefault();
             addError(label2);
         } else {
             removeError(label2);
         }
 
         if(valCheckBox === false) {
+            e.preventDefault();
             addError(label3);
         } else {
             removeError(label3);
         }
 
         if(testCCNum === false){
+            e.preventDefault();
             addError(label4);
         } else {
             removeError(label4);
         }
 
         if(testZipCode === false){
+            e.preventDefault();
             addError(label5);
         } else {
             removeError(label5);
         }
         if(testCVV === false){
+            e.preventDefault();
             addError(label6);
         } else {
             removeError(label6);
@@ -367,18 +369,21 @@ form.addEventListener('submit', (e)=>{
 //If credit card is not selected we don't validate credit card fields
     } else {
         if(testName === false){
+            e.preventDefault();
             addError(label1);
         } else {
             removeError(label1);
         }
         
         if(testEmail === false) {
+            e.preventDefault();
             addError(label2);
         } else {
             removeError(label2);
         }
 
         if(valCheckBox === false) {
+            e.preventDefault();
             addError(label3);
         } else {
             removeError(label3);
