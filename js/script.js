@@ -178,7 +178,7 @@ userEmail.addEventListener('input', (e)=>{
 
 //Validation Functions
 function validUserName(username) {
-    const input = /^[a-z]{1,10}?\s?[a-z]*$/.test(username);
+    const input = /^[A-Za-z]{1,10}?\s?[a-z]*$/.test(username);
     const noLetters = /^\d?\W*\d*/.test(username);
     const spaces = /^\s*$/.test(username);
     
